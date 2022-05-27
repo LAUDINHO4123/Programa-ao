@@ -1,15 +1,18 @@
 #ifndef PRODUCT_H
 #define PRODUCT_H
 
-struct product{
-    int id;
-    char nome[16];
-    int preco;
-    int stock;
-};
-
 typedef struct product *PRODUCT;
 
-PRODUCT *build_products(char *path);
+int get_id(PRODUCT p);
+char *get_nome(PRODUCT p);
+int get_preco(PRODUCT p);
+int get_stock(PRODUCT p);
+
+void set_id(PRODUCT p, int id);
+void set_nome(PRODUCT p, char nome);
+void set_preco(PRODUCT p, int preco);
+void set_stock(PRODUCT p, int stock);
+
+PRODUCT build_product(char *line);
 
 #endif

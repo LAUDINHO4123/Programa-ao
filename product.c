@@ -6,11 +6,51 @@
 #include <unistd.h>
 #include <fcntl.h>
 
+struct product{
+    int id;
+    char *nome;
+    int preco;
+    int stock;
+};
+
+
+int get_id(PRODUCT p){
+    return p->id;
+}
+
+char *get_nome(PRODUCT p){
+    return strdup(p->nome);
+}
+
+int get_preco(PRODUCT p){
+    return p->preco;
+}
+
+int get_stock(PRODUCT p){
+    return p->stock;
+}
+
+void set_id(PRODUCT p, int id){
+    p->id = id;
+}
+
+void set_nome(PRODUCT p, char nome){
+    p->nome = strdup(nome);
+}
+
+void set_preco(PRODUCT p, int preco){
+    p->preco = preco;
+}
+
+void set_stock(PRODUCT p, int stock){
+    p->stock = stock;
+}
+
 PRODUCT build_product(char *line){
     char *idC,*nome,*precoC,*stockC;
 
     if(!line) return NULL;
-    idC = strdup(strsep(&line, ";\n"));
+    idC = strdup(strsep(&line, " \n"));
     int id = valid_string(idC);
     if(id<0) {
         PRODUCT p = NULL;
@@ -43,7 +83,7 @@ PRODUCT build_product(char *line){
     PRODUCT p = malloc(sizeof(struct product));
 
     p->id = id;
-    p->nome = strdup(nome);
+    p->nome = nome;
     p->preco = preco;
     p->stock = stock;
     
@@ -51,40 +91,3 @@ PRODUCT build_product(char *line){
     return p;
 }
 
-PRODUCT *build_products(char *path) {
-
-    int file_fd = open(path,O_RDWR);
-
-    int arr_fst_len = 40;
-
-    char buf[4096];
-
-    PRODUCT *array = malloc (arr_fst_len * sizeof(PRODUCT));
-
-    int read = 0,
-            len_arr = arr_fst_len;
-
-    fgets(buf, 20, file_fd);
-
-    while (read_ln(file_fd,buf,4096)) {
-
-        if (read == len_arr - 2) {
-
-            len_arr += arr_fst_len;
-
-            array = realloc (array, len_arr * sizeof(PRODUCT));
-        }
-
-        array[read] = build_product(buf);
-
-        if (array[read] != NULL)
-
-            read++;
-    }
-
-    array[read] = NULL;
-
-    close(file_fd);
-
-    return array;
-}

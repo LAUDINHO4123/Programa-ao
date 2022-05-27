@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "products.h"
 #include "product.h"
 
@@ -16,12 +17,6 @@ void print_menu(){
     
 }
 
-void print_all(products ps){
-    while(ps->next!=NULL) {
-        print_product(ps->product);
-        ps=ps->next;
-    }
-}
 
 void print_product(PRODUCT p){
     int id,preco,stock;
@@ -36,31 +31,47 @@ void print_product(PRODUCT p){
 
 }
 
+void print_all(products ps){
+    while(get_next(ps)!=NULL) {
+        print_product(get_product(ps));
+        ps=get_next(ps);
+    }
+}
+
 int ui(){
     
     char buf[32];
     int i=0;
 
-    products ps = NULL;
+    products ps = create_products();
 
-    
+    print_menu();    
 
     while(fgets(buf, 32, stdin) && strncmp(buf,"-q",2)!=0){
 
         if(strncmp(buf,"-i",2)==0){
 
-            ps = build_products(buf,ps);
+            printf("inserting product...\n");
+
+            build_products(buf,&ps,i);
+
+            perror("product inserted");
+            i++;
         }
 
         if(strncmp(buf,"-r",2)==0){
             strsep(&buf, " \n");
             int id = atoi(buf);
-            remove_products(id, ps);
+            remove_products(id, &ps);
+            i--;
+
+            printf("product removed\n");
         }
 
         if(strncmp(buf,"-g",2)==0){
             strsep(&buf, " \n");
             int id = atoi(buf);
+            printf("id:%i\n",id);
 
             print_product(search_product(id,ps));
         }
@@ -72,5 +83,8 @@ int ui(){
         if(strncmp(buf,"-h",2)==0){
             print_menu();
         }
+
    }
+
+   return 1;
 }

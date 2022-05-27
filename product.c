@@ -8,7 +8,7 @@
 
 struct product{
     int id;
-    char *nome;
+    const char *nome;
     int preco;
     int stock;
 };
@@ -18,7 +18,7 @@ int get_id(PRODUCT p){
     return p->id;
 }
 
-char *get_nome(PRODUCT p){
+const char *get_nome(PRODUCT p){
     return strdup(p->nome);
 }
 
@@ -34,7 +34,7 @@ void set_id(PRODUCT p, int id){
     p->id = id;
 }
 
-void set_nome(PRODUCT p, char nome){
+void set_nome(PRODUCT p, const char *nome){
     p->nome = strdup(nome);
 }
 
@@ -49,9 +49,11 @@ void set_stock(PRODUCT p, int stock){
 PRODUCT build_product(char *line){
     char *idC,*nome,*precoC,*stockC;
 
+    strsep(&line, " \n");
+
     if(!line) return NULL;
     idC = strdup(strsep(&line, " \n"));
-    int id = valid_string(idC);
+    int id = atoi(idC);
     if(id<0) {
         PRODUCT p = NULL;
         return p;
@@ -59,13 +61,13 @@ PRODUCT build_product(char *line){
 
 
     if(!line) return NULL;
-    nome = strdup(strsep(&line, ";\n"));
+    nome = strdup(strsep(&line, " \n"));
     if(strlen(nome)==0) return NULL;
 
 
     if(!line) return NULL;
-    precoC = strdup(strsep(&line, ";\n"));
-    int preco = valid_string(precoC);
+    precoC = strdup(strsep(&line, " \n"));
+    int preco = atoi(precoC);
     if(preco<0) {
         PRODUCT p = NULL;
         return p;
@@ -73,8 +75,8 @@ PRODUCT build_product(char *line){
 
 
     if(!line) return NULL;
-    stockC = strdup(strsep(&line, ";\n"));
-    int stock = valid_string(stockC);
+    stockC = strdup(strsep(&line, " \n"));
+    int stock = atoi(stockC);
     if(stock<0) {
         PRODUCT p = NULL;
         return p;
@@ -86,6 +88,8 @@ PRODUCT build_product(char *line){
     p->nome = nome;
     p->preco = preco;
     p->stock = stock;
+
+    perror("product built");
     
 
     return p;

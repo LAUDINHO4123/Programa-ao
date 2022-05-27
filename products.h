@@ -6,8 +6,23 @@
 typedef struct products{
     PRODUCT product;
     struct products *next;
-} *products;
+}*products;
 
-products *new_products(char *path);
+
+PRODUCT get_product(products ps);
+
+products get_next(products ps);
+
+void set_product(products ps,PRODUCT p);
+
+void set_next(products ps,products next);
+
+products create_products();
+
+int remove_products(int id, products* ps);
+
+PRODUCT search_product(int id, products ps);
+
+void build_products(char *line, products* ps, int i);
 
 #endif

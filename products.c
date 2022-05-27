@@ -7,8 +7,31 @@
 #include <fcntl.h>
 #include "products.h"
 
+
+PRODUCT get_product(products ps){
+    return ps->product;
+}
+
+products get_next(products ps){
+    return ps->next;
+}
+
+void set_product(products ps,PRODUCT p){
+    ps->product = p;
+}
+
+void set_next(products ps,products next){
+    ps->next = next;
+}
+
+products create_products(){
+    products new = malloc(sizeof(struct products));
+
+    return new;
+}
+
 products new_products(PRODUCT p){
-    products ps = malloc(sizeof(struct products));
+    products ps = create_products();
 
     ps->product = p;
     ps->next=NULL;
@@ -16,27 +39,41 @@ products new_products(PRODUCT p){
     return ps;
 }
 
-void insertProduct (products* l, PRODUCT x) {
+int insertProduct (products* l, PRODUCT x,int i) {
     products list = *l;
+
+    if(i==0) {
+        list -> product = x;
+        list -> next = NULL;
+
+        return 1;
+    }
+
     products new = malloc(sizeof(struct products));
     new->product = x;
     new->next = NULL;
+
+    
     if(get_id(list->product) > get_id(x)) {
         *l = new;
         new->next = list;
+
+        return 1;
     }
-    else {
-        while(list->next) {
-            products next = list->next;
-            if(get_id(next->product) > get_id(x)) {
-                list->next = new;
-                new->next = next;
-                break;
-            }
-            list = list->next;
+    
+    while(list->next) {
+        products next = list->next;
+        if(get_id(next->product) > get_id(x)) {
+            list->next = new;
+            new->next = next;
+            return 1;
         }
-        list->next = new;
+        list = list->next;
     }
+    list->next = new;
+
+    return 0;
+    
 }
 
 int remove_products(int id, products* ps){
@@ -51,25 +88,23 @@ int remove_products(int id, products* ps){
         p->next=b->next;
         return 1;
     }
+
+    return 0;
 }
 
 PRODUCT search_product(int id, products ps){
 
     while (get_id(ps->product)<id && ps->next != NULL) ps=ps->next;
 
-    if(get_id(ps->product==id)) return ps->product;
+    if(get_id(ps->product)==id) return ps->product;
     
 
     return NULL;
 }
 
-void build_products(char *line, products* ps){
-    products products = *ps;
+void build_products(char *line, products* ps,int i){
     PRODUCT p = build_product(line);
-    if(products==NULL){
-        products = new_products(p);
-    }
-
-    else insertProduct(ps, p);
+    
+    insertProduct(ps, p,i);
 
 }

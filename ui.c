@@ -27,7 +27,7 @@ void print_product(PRODUCT p){
     preco = get_preco(p);
     stock = get_stock(p);
 
-    printf("|produto:%s, id:%i,preco:%i,quantidade em stock:%i\n|",nome,id,preco,stock);
+    printf("|produto:%s, id:%i,preco:%i,quantidade em stock:%i|\n",nome,id,preco,stock);
 
 }
 
@@ -69,9 +69,13 @@ int ui(){
         }
 
         if(strncmp(buf,"-g",2)==0){
-            strsep(&buf, " \n");
-            int id = atoi(buf);
-            printf("id:%i\n",id);
+            printf("searching product...\n");
+
+            char * token = strtok(buf, " ");
+            token = strtok(NULL, " \n");
+
+
+            int id = atoi(token);
 
             print_product(search_product(id,ps));
         }

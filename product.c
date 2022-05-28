@@ -6,7 +6,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-struct product{
+struct product{ 
     int id;
     const char *nome;
     int preco;
@@ -46,27 +46,27 @@ void set_stock(PRODUCT p, int stock){
     p->stock = stock;
 }
 
-PRODUCT build_product(char *line){
+PRODUCT build_product(char *line){ // constroi um produto dado uma linha
     char *idC,*nome,*precoC,*stockC;
 
-    strsep(&line, " \n");
+    strsep(&line, " \n"); // tira o comando inicial da string,separa a flag do comando da linha de produto
 
-    if(!line) return NULL;
-    idC = strdup(strsep(&line, " \n"));
+    if(!line) return NULL; //ver se deu algum problema
+    idC = strdup(strsep(&line, " \n"));// mete a string id no idc e transforma em inteiro
     int id = atoi(idC);
-    if(id<0) {
+    if(id<0) { 
         PRODUCT p = NULL;
         return p;
     }
 
 
-    if(!line) return NULL;
-    nome = strdup(strsep(&line, " \n"));
+    if(!line) return NULL; // ve se da erro e mete o nome la
+    nome = strdup(strsep(&line, " \n")); 
     if(strlen(nome)==0) return NULL;
 
 
     if(!line) return NULL;
-    precoC = strdup(strsep(&line, " \n"));
+    precoC = strdup(strsep(&line, " \n")); //mete a string id no precoc e transforma em inteiro
     int preco = atoi(precoC);
     if(preco<0) {
         PRODUCT p = NULL;
@@ -75,14 +75,14 @@ PRODUCT build_product(char *line){
 
 
     if(!line) return NULL;
-    stockC = strdup(strsep(&line, " \n"));
+    stockC = strdup(strsep(&line, " \n")); // mete a string id no stockc e transforma em inteiro
     int stock = atoi(stockC);
     if(stock<0) {
         PRODUCT p = NULL;
         return p;
     }
 
-    PRODUCT p = malloc(sizeof(struct product));
+    PRODUCT p = malloc(sizeof(struct product)); // aloca a memoria para o produto e coloca os dados na struct
 
     p->id = id;
     p->nome = nome;

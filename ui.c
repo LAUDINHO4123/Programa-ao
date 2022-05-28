@@ -19,23 +19,31 @@ void print_menu(){
 
 
 void print_product(PRODUCT p){
-    int id,preco,stock;
-    char *nome;
 
-    id  = get_id(p);
-    nome = get_nome(p);
-    preco = get_preco(p);
-    stock = get_stock(p);
+    if(!p) {
+        printf("product not found\n");
+    }
 
-    printf("|produto:%s, id:%i,preco:%i,quantidade em stock:%i|\n",nome,id,preco,stock);
+    else{
+        int id,preco,stock;
+        char *nome;
 
+        id  = get_id(p);
+        nome = get_nome(p);
+        preco = get_preco(p);
+        stock = get_stock(p);
+
+        printf("|produto: %s, id: %i, preco: %i, quantidade em stock:%i|\n",nome,id,preco,stock);
+    }
 }
 
-void print_all(products ps){
-    while(get_next(ps)!=NULL) {
+void print_all(products ps, int i){
+    while(get_next(ps)!=NULL && i>0) {
         print_product(get_product(ps));
         ps=get_next(ps);
+        i--;
     }
+    print_product(get_product(ps));
 }
 
 int ui(){
@@ -60,12 +68,19 @@ int ui(){
         }
 
         if(strncmp(buf,"-r",2)==0){
-            strsep(&buf, " \n");
-            int id = atoi(buf);
-            remove_products(id, &ps);
+
+            printf("removing product...\n");
+
+            char * token = strtok(buf, " ");
+            token = strtok(NULL, " \n");
+
+
+            int id = atoi(token);
+            
+            remove_products(id, &ps,i);
             i--;
 
-            printf("product removed\n");
+            perror("product removed");
         }
 
         if(strncmp(buf,"-g",2)==0){
@@ -77,11 +92,11 @@ int ui(){
 
             int id = atoi(token);
 
-            print_product(search_product(id,ps));
+            print_product(search_product(id,ps,i));
         }
 
         if(strncmp(buf,"-p",2)==0) {
-            print_all(ps);
+            print_all(ps,i);
         }
 
         if(strncmp(buf,"-h",2)==0){

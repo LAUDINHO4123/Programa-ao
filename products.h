@@ -19,9 +19,9 @@ void set_next(products ps,products next);
 
 products create_products();
 
-int remove_products(int id, products* ps);
+int remove_products(int id, products* ps, int i);
 
-PRODUCT search_product(int id, products ps);
+PRODUCT search_product(int id, products ps,int i);
 
 void build_products(char *line, products* ps, int i);
 
